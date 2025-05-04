@@ -1,0 +1,7 @@
+CREATE DATABASE authdb;
+CREATE DATABASE catalogdb;
+CREATE DATABASE venuedb;
+CREATE DATABASE scheduledb;
+CREATE DATABASE bookingdb;
+CREATE DATABASE paymentdb;
+CREATE DATABASE userdb;

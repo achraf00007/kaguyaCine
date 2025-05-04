@@ -1,0 +1,101 @@
+networks:
+  cinema-net:
+
+volumes:
+  pgdata:
+  pginit:
+
+services:
+  #------------------------------------------------------------------#
+  #                       ❶  base de données                         #
+  #------------------------------------------------------------------#
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: Azerty@123.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports: ['5432:5432']          # accessible depuis l’hôte
+    networks: [cinema-net]
+
+  #------------------------------------------------------------------#
+  #                       ❷  micro-services                          #
+  #------------------------------------------------------------------#
+  auth-service:
+    build: ./auth-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/authdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8081
+    depends_on: [postgres]
+    ports: ['8081:8081']
+    networks: [cinema-net]
+
+  catalog-service:
+    build: ./catalog-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/catalogdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8082
+    depends_on: [postgres]
+    ports: ['8082:8082']
+    networks: [cinema-net]
+
+  venue-service:
+    build: ./venue-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/venuedb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8083
+    depends_on: [postgres]
+    ports: ['8083:8083']
+    networks: [cinema-net]
+
+  schedule-service:
+    build: ./schedule-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/scheduledb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8084
+    depends_on: [postgres]
+    ports: ['8084:8084']
+    networks: [cinema-net]
+
+  booking-service:
+    build: ./booking-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/bookingdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8085
+    depends_on: [postgres]
+    ports: ['8085:8085']
+    networks: [cinema-net]
+
+  payment-service:
+    build: ./payment-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/paymentdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8086
+    depends_on: [postgres]
+    ports: ['8086:8086']
+    networks: [cinema-net]
+
+  user-service:
+    build: ./user-service
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:postgresql://postgres:5432/userdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Azerty@123.
+      SERVER_PORT:                8087
+    depends_on: [postgres]
+    ports: ['8087:8087']
+    networks: [cinema-net]
