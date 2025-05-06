@@ -15,7 +15,7 @@ services:
       POSTGRES_USER:     postgres
       POSTGRES_PASSWORD: Azerty@123.
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
       - ./docker/sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports: ['5432:5432']          # accessible depuis l’hôte
     networks: [cinema-net]
